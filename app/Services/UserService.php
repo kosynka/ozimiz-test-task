@@ -15,7 +15,7 @@ class UserService extends Service
 
     public function findByEmail(string $email): Model
     {
-        return User::where('email', $email)->firstOrFail();
+        return $this->model->where('email', $email)->firstOrFail();
     }
 
     public function checkLogin(array $data): array

@@ -10,11 +10,11 @@ use Symfony\Component\HttpFoundation\Response;
 
 class AuthController extends Controller
 {
-    public function __construct(private UserService $userService) {}
+    public function __construct(private UserService $service) {}
 
     public function login(LoginRequest $request): JsonResponse
     {
-        $data = $this->userService->checkLogin($request->validated());
+        $data = $this->service->checkLogin($request->validated());
 
         if (! $data['success']) {
             return response()->json([

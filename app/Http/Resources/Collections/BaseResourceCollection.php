@@ -11,6 +11,18 @@ abstract class BaseResourceCollection extends ResourceCollection
 
     public function toArray($request)
     {
-        return ['data' => $this->getResourceForPagination()];
+        return [
+            'data' => $this->getResourceForPagination(),
+            'meta' => [
+                'current_page' => $this->currentPage(),
+                'per_page' => (int) $this->perPage(),
+                'page' => $this->currentPage(),
+                'total' => $this->total(),
+
+                'from' => $this->firstItem(),
+                'to' => $this->lastItem(),
+                'last_page' => $this->lastPage(),
+            ],
+        ];
     }
 }

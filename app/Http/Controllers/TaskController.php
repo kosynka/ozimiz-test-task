@@ -2,33 +2,32 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Task\IndexRequest;
 use App\Http\Requests\Task\StoreRequest;
 use App\Http\Requests\Task\UpdateRequest;
 use App\Http\Resources\Collections\TaskCollection;
 use App\Http\Resources\TaskResource;
 use App\Models\Task;
+use App\Services\TaskService;
 use Illuminate\Http\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 
 class TaskController extends Controller
 {
-    public function index()
+    public function __construct(private TaskService $service) {}
+
+    public function index(IndexRequest $request)
     {
-        $data = Task::where('user_id', auth()->user()->id)->get();
+        $data = $this->service->index($request->validated());
 
         return response()->json(new TaskCollection($data));
     }
 
     public function store(StoreRequest $request)
     {
-        $data = $request->validated();
-        $data['user_id'] = auth()->user()->id;
+        $task = $this->service->store($request->validated());
 
-        $task = Task::create($data);
-
-        return response()->json([
-            'data' => new TaskResource($task)
-        ]);
+        return response()->json(['data' => new TaskResource($task)]);
     }
 
     public function show(Task $task): JsonResponse
@@ -40,9 +39,7 @@ class TaskController extends Controller
             ], Response::HTTP_FORBIDDEN);
         }
 
-        return response()->json([
-            'data' => new TaskResource($task)
-        ]);
+        return response()->json(['data' => new TaskResource($task)]);
     }
 
     public function update(UpdateRequest $request, Task $task)
@@ -54,16 +51,14 @@ class TaskController extends Controller
             ], Response::HTTP_FORBIDDEN);
         }
 
-        $task->update($request->validated());
+        $this->service->update($task, $request->validated());
 
-        return response()->json([
-            'data' => new TaskResource($task->refresh())
-        ]);
+        return response()->json(['data' => new TaskResource($task->refresh())]);
     }
 
     public function destroy(Task $task)
     {
-        if ($task->delete()) {
+        if ($this->service->delete($task)) {
             return response()->json([
                 'message' => 'success',
                 'data' => [],
