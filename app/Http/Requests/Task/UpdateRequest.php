@@ -27,6 +27,7 @@ class UpdateRequest extends FormRequest
             'title' => ['sometimes', 'string', 'min:3'],
             'description' => ['sometimes', 'string', 'min:3'],
             'status' => ['sometimes', 'string', (new Enum(TaskStatus::class))],
+            'image' => ['sometimes', 'mimes:jpg,jpeg,png', 'max:10240'],
         ];
     }
 }

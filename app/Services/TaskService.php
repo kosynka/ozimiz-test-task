@@ -39,6 +39,23 @@ class TaskService extends Service
     {
         $data['user_id'] = auth()->user()->id;
 
+        if (request()->file('image')) {
+            $data['image_url'] = $this->storeFile(request()->file('image'));
+        }
+
         return $this->model->create($data);
+    }
+
+    public function update(Model $model, array $data): bool
+    {
+        if (request()->file('image')) {
+            $data['image_url'] = $this->storeFile(request()->file('image'));
+
+            unset($data['image']);
+        }
+
+        $model->update($data);
+
+        return $model->save();
     }
 }

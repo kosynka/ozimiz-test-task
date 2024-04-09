@@ -7,7 +7,6 @@ use App\Http\Requests\Task\StoreRequest;
 use App\Http\Requests\Task\UpdateRequest;
 use App\Http\Resources\Collections\TaskCollection;
 use App\Http\Resources\TaskResource;
-use App\Models\Task;
 use App\Services\TaskService;
 use Illuminate\Http\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -30,8 +29,10 @@ class TaskController extends Controller
         return response()->json(['data' => new TaskResource($task)]);
     }
 
-    public function show(Task $task): JsonResponse
+    public function show(int $id): JsonResponse
     {
+        $task = $this->service->find($id);
+
         if ($task->user_id !== auth()->user()->id) {
             return response()->json([
                 'message' => 'forbidden',
@@ -42,8 +43,10 @@ class TaskController extends Controller
         return response()->json(['data' => new TaskResource($task)]);
     }
 
-    public function update(UpdateRequest $request, Task $task)
+    public function update(UpdateRequest $request, int $id)
     {
+        $task = $this->service->find($id);
+
         if ($task->user_id !== auth()->user()->id) {
             return response()->json([
                 'message' => 'forbidden',
@@ -56,8 +59,17 @@ class TaskController extends Controller
         return response()->json(['data' => new TaskResource($task->refresh())]);
     }
 
-    public function destroy(Task $task)
+    public function destroy(int $id)
     {
+        $task = $this->service->find($id);
+
+        if ($task->user_id !== auth()->user()->id) {
+            return response()->json([
+                'message' => 'forbidden',
+                'data' => [],
+            ], Response::HTTP_FORBIDDEN);
+        }
+
         if ($this->service->delete($task)) {
             return response()->json([
                 'message' => 'success',

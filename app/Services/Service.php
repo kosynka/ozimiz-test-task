@@ -5,10 +5,16 @@ namespace App\Services;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 
 abstract class Service
 {
     protected Model $model;
+
+    public function find(int $id): Model
+    {
+        return $this->model->findOrFail($id);
+    }
 
     public function store(array $data): Model
     {
@@ -46,5 +52,19 @@ abstract class Service
         }
 
         return $query->orderBy($sortBy, $sort);
+    }
+
+    protected function storeFile($file): string
+    {
+        $filePath = $this->generateFileName();
+
+        $file->storeAs('', $filePath, ['disk' => 'public']);
+
+        return Storage::disk('public')->url($filePath);
+    }
+
+    private function generateFileName(): string
+    {
+        return uniqid('task_image_') . '_' . now()->format('Y_m_d_h_i_s') . '.png';
     }
 }
