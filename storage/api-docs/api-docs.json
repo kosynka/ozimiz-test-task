@@ -1,0 +1,610 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Portals OpenApi Documentation",
+        "description": "Portals Swagger OpenApi description",
+        "license": {
+            "name": "Apache 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+        },
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "http://127.0.0.1:8000/api/v1",
+            "description": "Portals API Server"
+        },
+        {
+            "url": "http://127.0.0.1:8000/api/v1"
+        }
+    ],
+    "paths": {
+        "/auth/login": {
+            "post": {
+                "tags": [
+                    "auth"
+                ],
+                "summary": "login to get token",
+                "description": "login to get token",
+                "operationId": "login",
+                "requestBody": {
+                    "description": "Data for storing collection",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "email": {
+                                        "type": "string",
+                                        "default": "fake@mail.com"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "default": "password"
+                                    },
+                                    "password_confirmation": {
+                                        "type": "string",
+                                        "default": "password"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "HTTP_OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "default": "success"
+                                        },
+                                        "token": {
+                                            "type": "string",
+                                            "default": "1|oBbCtlOy0bbZogdrBucE4oghfyv5v5mWkDWTIoB5d33aeca4"
+                                        },
+                                        "user": {
+                                            "properties": {
+                                                "id": {
+                                                    "type": "number",
+                                                    "default": "1"
+                                                },
+                                                "name": {
+                                                    "type": "string",
+                                                    "default": "Test User"
+                                                },
+                                                "email": {
+                                                    "type": "string",
+                                                    "default": "fake@mail.com"
+                                                },
+                                                "created_at": {
+                                                    "type": "string",
+                                                    "format": "date",
+                                                    "default": "2024-04-08T23:51:10.000000Z"
+                                                },
+                                                "updated_at": {
+                                                    "type": "string",
+                                                    "format": "date",
+                                                    "default": "2024-04-08T23:51:10.000000Z"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "HTTP_BAD_REQUEST"
+                    },
+                    "401": {
+                        "description": "HTTP_UNAUTHORIZED"
+                    },
+                    "404": {
+                        "description": "HTTP_NOT_FOUND"
+                    },
+                    "500": {
+                        "description": "HTTP_INTERNAL_SERVER_ERROR"
+                    }
+                }
+            }
+        },
+        "/tasks": {
+            "get": {
+                "tags": [
+                    "tasks"
+                ],
+                "summary": "List tasks",
+                "description": "Get paginated list of tasks",
+                "operationId": "index",
+                "parameters": [
+                    {
+                        "name": "status",
+                        "in": "query",
+                        "description": "Filterable statuses: new, canceled, completed",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "default": "new"
+                        }
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "Page number",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 1
+                        }
+                    },
+                    {
+                        "name": "per_page",
+                        "in": "query",
+                        "description": "Items per page",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 15
+                        }
+                    },
+                    {
+                        "name": "sort_by",
+                        "in": "query",
+                        "description": "Sortable fields: id, status, created_at, updated_at",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "default": "id"
+                        }
+                    },
+                    {
+                        "name": "sort",
+                        "in": "query",
+                        "description": "Sort type: asc, desc",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "default": "asc"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "HTTP_OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "number",
+                                                        "default": "1"
+                                                    },
+                                                    "title": {
+                                                        "type": "string",
+                                                        "default": "test"
+                                                    },
+                                                    "description": {
+                                                        "type": "string",
+                                                        "default": "test"
+                                                    },
+                                                    "status": {
+                                                        "type": "string",
+                                                        "default": "new"
+                                                    },
+                                                    "image": {
+                                                        "type": "string",
+                                                        "default": "http://127.0.0.1:8000/storage/task_image_6614856520a32_2024_04_09_12_01_41.png"
+                                                    },
+                                                    "created_at": {
+                                                        "type": "string",
+                                                        "format": "date",
+                                                        "default": "2024-04-08T23:51:10.000000Z"
+                                                    },
+                                                    "updated_at": {
+                                                        "type": "string",
+                                                        "format": "date",
+                                                        "default": "2024-04-08T23:51:10.000000Z"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "HTTP_BAD_REQUEST"
+                    },
+                    "401": {
+                        "description": "HTTP_UNAUTHORIZED"
+                    },
+                    "404": {
+                        "description": "HTTP_NOT_FOUND"
+                    },
+                    "500": {
+                        "description": "HTTP_INTERNAL_SERVER_ERROR"
+                    }
+                },
+                "security": [
+                    {
+                        "apiAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "tasks"
+                ],
+                "summary": "Store task",
+                "description": "Store new task",
+                "operationId": "store",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "title",
+                                    "description"
+                                ],
+                                "properties": {
+                                    "title": {
+                                        "type": "string",
+                                        "default": "title"
+                                    },
+                                    "description": {
+                                        "type": "string",
+                                        "default": "description"
+                                    },
+                                    "image": {
+                                        "type": "file"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "HTTP_OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "properties": {
+                                                "id": {
+                                                    "type": "number",
+                                                    "default": "1"
+                                                },
+                                                "title": {
+                                                    "type": "string",
+                                                    "default": "test"
+                                                },
+                                                "description": {
+                                                    "type": "string",
+                                                    "default": "test"
+                                                },
+                                                "status": {
+                                                    "type": "string",
+                                                    "default": "new"
+                                                },
+                                                "image": {
+                                                    "type": "string",
+                                                    "default": "http://127.0.0.1:8000/storage/task_image_6614856520a32_2024_04_09_12_01_41.png"
+                                                },
+                                                "created_at": {
+                                                    "type": "string",
+                                                    "format": "date",
+                                                    "default": "2024-04-08T23:51:10.000000Z"
+                                                },
+                                                "updated_at": {
+                                                    "type": "string",
+                                                    "format": "date",
+                                                    "default": "2024-04-08T23:51:10.000000Z"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "HTTP_BAD_REQUEST"
+                    },
+                    "401": {
+                        "description": "HTTP_UNAUTHORIZED"
+                    },
+                    "404": {
+                        "description": "HTTP_NOT_FOUND"
+                    },
+                    "500": {
+                        "description": "HTTP_INTERNAL_SERVER_ERROR"
+                    }
+                },
+                "security": [
+                    {
+                        "apiAuth": []
+                    }
+                ]
+            }
+        },
+        "/tasks/{id}": {
+            "get": {
+                "tags": [
+                    "tasks"
+                ],
+                "summary": "Show task",
+                "description": "Get one task",
+                "operationId": "show",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "HTTP_OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "properties": {
+                                                "id": {
+                                                    "type": "number",
+                                                    "default": "1"
+                                                },
+                                                "title": {
+                                                    "type": "string",
+                                                    "default": "test"
+                                                },
+                                                "description": {
+                                                    "type": "string",
+                                                    "default": "test"
+                                                },
+                                                "status": {
+                                                    "type": "string",
+                                                    "default": "new"
+                                                },
+                                                "image": {
+                                                    "type": "string",
+                                                    "default": "http://127.0.0.1:8000/storage/task_image_6614856520a32_2024_04_09_12_01_41.png"
+                                                },
+                                                "created_at": {
+                                                    "type": "string",
+                                                    "format": "date",
+                                                    "default": "2024-04-08T23:51:10.000000Z"
+                                                },
+                                                "updated_at": {
+                                                    "type": "string",
+                                                    "format": "date",
+                                                    "default": "2024-04-08T23:51:10.000000Z"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "HTTP_BAD_REQUEST"
+                    },
+                    "401": {
+                        "description": "HTTP_UNAUTHORIZED"
+                    },
+                    "404": {
+                        "description": "HTTP_NOT_FOUND"
+                    },
+                    "500": {
+                        "description": "HTTP_INTERNAL_SERVER_ERROR"
+                    }
+                },
+                "security": [
+                    {
+                        "apiAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "tasks"
+                ],
+                "summary": "update task",
+                "description": "update task",
+                "operationId": "update",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "properties": {
+                                    "title": {
+                                        "type": "string",
+                                        "default": "title"
+                                    },
+                                    "description": {
+                                        "type": "string",
+                                        "default": "description"
+                                    },
+                                    "image": {
+                                        "type": "file"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "HTTP_OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "properties": {
+                                                "id": {
+                                                    "type": "number",
+                                                    "default": "1"
+                                                },
+                                                "title": {
+                                                    "type": "string",
+                                                    "default": "test"
+                                                },
+                                                "description": {
+                                                    "type": "string",
+                                                    "default": "test"
+                                                },
+                                                "status": {
+                                                    "type": "string",
+                                                    "default": "new"
+                                                },
+                                                "image": {
+                                                    "type": "string",
+                                                    "default": "http://127.0.0.1:8000/storage/task_image_6614856520a32_2024_04_09_12_01_41.png"
+                                                },
+                                                "created_at": {
+                                                    "type": "string",
+                                                    "format": "date",
+                                                    "default": "2024-04-08T23:51:10.000000Z"
+                                                },
+                                                "updated_at": {
+                                                    "type": "string",
+                                                    "format": "date",
+                                                    "default": "2024-04-08T23:51:10.000000Z"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "HTTP_BAD_REQUEST"
+                    },
+                    "401": {
+                        "description": "HTTP_UNAUTHORIZED"
+                    },
+                    "404": {
+                        "description": "HTTP_NOT_FOUND"
+                    },
+                    "500": {
+                        "description": "HTTP_INTERNAL_SERVER_ERROR"
+                    }
+                },
+                "security": [
+                    {
+                        "apiAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "tasks"
+                ],
+                "summary": "delete task",
+                "description": "delete task",
+                "operationId": "delete",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "HTTP_OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "default": "[]"
+                                        },
+                                        "message": {
+                                            "default": "success"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "HTTP_BAD_REQUEST"
+                    },
+                    "401": {
+                        "description": "HTTP_UNAUTHORIZED"
+                    },
+                    "404": {
+                        "description": "HTTP_NOT_FOUND"
+                    },
+                    "500": {
+                        "description": "HTTP_INTERNAL_SERVER_ERROR"
+                    }
+                },
+                "security": [
+                    {
+                        "apiAuth": []
+                    }
+                ]
+            }
+        }
+    },
+    "components": {
+        "securitySchemes": {
+            "apiAuth": {
+                "type": "http",
+                "description": "Login with to get the authentication token",
+                "name": "Token based",
+                "in": "header",
+                "scheme": "bearer"
+            }
+        }
+    }
+}

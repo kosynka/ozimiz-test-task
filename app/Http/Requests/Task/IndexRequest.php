@@ -25,7 +25,7 @@ class IndexRequest extends FormRequest
     {
         return [
             'status' => ['nullable', 'string', (new Enum(TaskStatus::class))],
-            'sort_by' => ['nullable', 'string', 'in:id,status'],
+            'sort_by' => ['nullable', 'string', 'in:id,status,created_at,updated_at'],
             'sort' => ['nullable', 'string', 'in:asc,desc'],
             'page' => ['nullable', 'integer', 'min:1'],
             'per_page' => ['nullable', 'integer', 'min:1'],
